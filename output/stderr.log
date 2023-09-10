@@ -1,0 +1,1 @@
+2023-09-11 07:29:24,203 - RPA.core.certificates - INFO - Truststore not in use, HTTPS traffic validated against `certifi` package. (requires Python 3.10.12 and 'pip' 23.2.1 at minimum)
