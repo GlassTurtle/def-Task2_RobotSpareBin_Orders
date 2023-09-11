@@ -60,10 +60,11 @@ def Task2_RobotSpareBin_Orders():
 def archive_receipts():
     """ zip the output into an archive """
     lib = Archive()
-    lib.archive_folder_with_zip('/output/receipts', 'receipts.zip')
+    lib.archive_folder_with_zip('output/receipts', 'receipts.zip')
     # anyway to change to location of the .zip?
     # does this delete the receipts folder?
     # the zips are cumulative? is it zipping non-permanently deleted files?
+         # I was stupid... '/output/receipts' stores in drive root...
 
 def embed_screenshot_to_receipt(screenshot, pdf_file):
     """ add the screenshot to the pdf doc  """
@@ -78,8 +79,8 @@ def embed_screenshot_to_receipt(screenshot, pdf_file):
 def screenshot_robot(order_number):
     """ saves screenshot of the receipts page """
     page = browser.page()
-    page.screenshot(path="/output/receipts/"+ order_number + ".png")
-    return "/output/receipts/"+ order_number + ".png"
+    page.screenshot(path="output/receipts/"+ order_number + ".png")
+    return "output/receipts/"+ order_number + ".png"
     
 
 def store_receipt_as_pdf(order_number):
@@ -88,8 +89,8 @@ def store_receipt_as_pdf(order_number):
     pdf = PDF()
     # filename = "/output/receipts/" + order_number + ".pdf"
     HTML_print = page.locator('[id="order-completion"]').inner_html() 
-    pdf.html_to_pdf(HTML_print, "/output/receipts/" + order_number + ".pdf")
-    return "/output/receipts/" + order_number + ".pdf"
+    pdf.html_to_pdf(HTML_print, "output/receipts/" + order_number + ".pdf")
+    return "output/receipts/" + order_number + ".pdf"
     #the pdf functions don't return the path right?
 
 
