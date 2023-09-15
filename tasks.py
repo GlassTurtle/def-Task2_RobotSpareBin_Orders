@@ -17,6 +17,7 @@ def Task2_RobotSpareBin_Orders():
     """
      
     browser.configure(
+        #slowmo=500,
         slowmo=50,
     )
 
@@ -44,13 +45,15 @@ def Task2_RobotSpareBin_Orders():
         
         ordernum = page.locator('[class="badge badge-success"]').inner_html()
         # print (ordernum)
-        # either create a new receipts folder/run? or clear existing receipts? Are the order number based on time or just the input?
+        # either create a new receipts folder/run? or clear existing receipts? 
+        # Are the order number based on time or just the input? Probably time/random generation.
         path_orderpdf = store_receipt_as_pdf(ordernum)
         path_screensht = screenshot_robot(ordernum)
         embed_screenshot_to_receipt(path_screensht, path_orderpdf)
 
         # print(path_orderpdf)
         # print(path_screensht)
+        # time.sleep(2)
 
         page.click('[id="order-another"]')
 
@@ -91,7 +94,7 @@ def store_receipt_as_pdf(order_number):
     HTML_print = page.locator('[id="order-completion"]').inner_html() 
     pdf.html_to_pdf(HTML_print, "output/receipts/" + order_number + ".pdf")
     return "output/receipts/" + order_number + ".pdf"
-    #the pdf functions don't return the path right?
+    #the pdf functions don't return the path right? - nope
 
 
 def fill_the_form(row):
@@ -126,7 +129,7 @@ def fill_the_form(row):
     i = 0
     while i < 8:
         page.click('[id="order"]')
-        # try:
+        # try: #nevermind, try waits for timeout, just detect order another button instead
         #     #breaks if the order another button can be found, tries to order again if not found
         #     #waits for timeout, though, can change? or just if statement to look for?
         #     time.sleep(3)
@@ -141,6 +144,7 @@ def fill_the_form(row):
             # time.sleep(3)
             # page.click('[id="order-another"]')
             # click 'another order' after the pdf export
+            # moved to main.
             # break
             return True
 
