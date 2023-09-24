@@ -79,14 +79,6 @@ def store_receipt_as_pdf(order_number):
     pdf = PDF()
     pdf.html_to_pdf(HTML_print, filename)
     
-    # opening a new window, writing html to new page to export with border. Also appends the image upside down for some reason.
-    # test = browser.playwright()
-    # browser2 = test.chromium.launch()   
-    # page2 = browser2.new_page()
-    # page2.set_content(HTML_print)
-    # page2.pdf(path=filename, format="A4", margin={"top": "1cm", "bottom": "1cm", "left": "1cm", "right": "1cm"})
-    # browser2.close()
-
     return filename
 
 def clear_prev_receipts(path_clearfiles):
