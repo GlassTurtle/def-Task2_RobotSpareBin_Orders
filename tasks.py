@@ -4,6 +4,8 @@ from RPA.PDF import PDF
 from RPA.Tables import Tables
 from RPA.Archive import Archive
 import time
+import os
+import glob
 
 @task
 def Task2_RobotSpareBin_Orders():
@@ -20,11 +22,14 @@ def Task2_RobotSpareBin_Orders():
         slowmo=50,
     )
 
+    # clear existing receipts folder for local runs
+    # path_receipts = "output/receipts/"
+    # clear_prev_receipts(path_receipts)
+
     open_robot_order_website()
     orders = get_orders()
     
     for i in range(len(orders._data)):
-    # for i in range(5):
         close_annoying_modal()
         fill_the_form(orders.get_row(i))
         page = browser.page()
@@ -54,7 +59,6 @@ def embed_screenshot_to_receipt(screenshot, pdf_file):
         coverage=0.2
     )
 
-
 def screenshot_robot(order_number):
     """ saves screenshot of the receipts page """
     filename = "output/receipts/"+ order_number + ".png"
@@ -68,13 +72,33 @@ def store_receipt_as_pdf(order_number):
     """ takes the order number, and return the file system path to the PDF file which includes the order number"""
     filename = "output/receipts/" + order_number + ".pdf"
     page = browser.page()
-    pdf = PDF()
-    HTML_print = page.locator('[id="order-completion"]').inner_html()
-    # HTML_print = page.locator('[id="order-completion"]')
-    HTML_print = f'<div style="margin-top: 5cm;margin-left: 20px;margin-right: 20px;">{HTML_print}</div>'
+    HTML_print = page.locator('[id="receipt"]').inner_html()
+    HTML_print = f'<div style="margin-top: 20cm;margin-left: 50px;margin-right: 20px;">{HTML_print}</div>'
+    # HTML_print = f'<div style="margin: 50px 100px 50px 100px;">{HTML_print}</div>'
 
+    pdf = PDF()
     pdf.html_to_pdf(HTML_print, filename)
+    
+    # opening a new window, writing html to new page to export with border. Also appends the image upside down for some reason.
+    # test = browser.playwright()
+    # browser2 = test.chromium.launch()   
+    # page2 = browser2.new_page()
+    # page2.set_content(HTML_print)
+    # page2.pdf(path=filename, format="A4", margin={"top": "1cm", "bottom": "1cm", "left": "1cm", "right": "1cm"})
+    # browser2.close()
+
     return filename
+
+def clear_prev_receipts(path_clearfiles):
+    """ Remove existing files from previous runs for local runs """
+    #number of pdf files should be the same as png files, but just in case.
+    files1 = glob.glob(f"{path_clearfiles}*.pdf")
+    files2 = glob.glob(f"{path_clearfiles}*.png")
+    for file1 in files1:
+        os.remove(file1)
+    for file2 in files2:
+        os.remove(file2)
+
 
 def fill_the_form(row):
     """ for an inputted row, fill in the form data  """
